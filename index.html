@@ -595,6 +595,35 @@ h3{font-size:17px;letter-spacing:-.025em}
  .onboard-roadmap{grid-template-columns:1fr}
 }
 
+
+.sales-modal{display:none;position:fixed;inset:0;z-index:200;align-items:center;justify-content:center;padding:22px}
+.sales-modal.open{display:flex}
+.sales-modal-backdrop{position:absolute;inset:0;background:rgba(11,18,32,.72);backdrop-filter:blur(4px)}
+.sales-modal-panel{position:relative;z-index:1;width:min(920px,100%);max-height:calc(100vh - 44px);overflow:auto;background:#FFFDF8;border:1px solid #D9CDBC;border-radius:16px;box-shadow:0 30px 90px rgba(11,18,32,.3)}
+.sales-modal-head{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;padding:28px 30px 20px;border-bottom:1px solid var(--line)}
+.sales-modal-head h2{margin:4px 0 7px;font-size:30px}
+.sales-modal-head p{margin:0;color:var(--muted);font-size:14px}
+.modal-x{width:38px;height:38px;flex:0 0 38px;border-radius:50%;border:1px solid var(--line);background:#F5F1E9;color:var(--ink);font-size:26px;line-height:1;cursor:pointer}
+.sales-modal-fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:22px 30px}
+.sales-modal-fields label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#6B7789;font-weight:800}
+.sales-modal-fields input,.sales-modal-fields select{display:block;width:100%;margin-top:8px;padding:12px 13px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink);font:650 15px var(--font-body);min-height:47px}
+.percent-input{position:relative}.percent-input span{position:absolute;right:13px;bottom:11px;color:var(--muted);font-weight:800}.percent-input input{padding-right:34px}
+.sales-modal-results{background:var(--ink);color:#fff;padding:27px 30px}
+.modal-primary{padding-bottom:21px;border-bottom:1px solid #354056}
+.modal-primary span,.modal-talk-track span{display:block;color:#F07A52;font-size:9px;letter-spacing:.16em;font-weight:800}
+.modal-primary strong{display:block;font-family:var(--font-display);font-weight:600;font-size:45px;letter-spacing:-.04em;line-height:1.15;margin:6px 0;color:#F5F1E9}
+.modal-primary small{color:#9EA8B7}
+.modal-result-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:22px 0}
+.modal-result-grid>div{padding:13px 18px;border-right:1px solid #354056;border-bottom:1px solid #354056}
+.modal-result-grid>div:nth-child(3n){border-right:0}.modal-result-grid>div:nth-last-child(-n+3){border-bottom:0}
+.modal-result-grid span{display:block;color:#9EA8B7;font-size:11px}
+.modal-result-grid strong{display:block;color:#F5F1E9;font-family:var(--font-display);font-size:23px;font-weight:600;margin-top:5px}
+.modal-talk-track{background:#223348;border-left:3px solid var(--blue);padding:15px 17px;border-radius:0 8px 8px 0}
+.modal-talk-track p{margin:5px 0 0;color:#EEF0F3;font-size:14px;line-height:1.55}
+.sales-modal-foot{padding:14px 30px 18px;color:#7A8492;font-size:11px}
+@media(max-width:760px){.sales-modal{padding:10px}.sales-modal-panel{max-height:calc(100vh - 20px)}.sales-modal-head{padding:22px 18px 16px}.sales-modal-head h2{font-size:25px}.sales-modal-fields{grid-template-columns:1fr 1fr;padding:18px}.sales-modal-results{padding:22px 18px}.modal-result-grid{grid-template-columns:1fr 1fr}.modal-result-grid>div{border-right:1px solid #354056!important;border-bottom:1px solid #354056!important}.modal-result-grid>div:nth-child(2n){border-right:0!important}.modal-result-grid>div:nth-last-child(-n+2){border-bottom:0!important}}
+@media(max-width:460px){.sales-modal-fields,.modal-result-grid{grid-template-columns:1fr}.modal-result-grid>div{border-right:0!important}.modal-result-grid>div:nth-last-child(2){border-bottom:1px solid #354056!important}.modal-primary strong{font-size:36px}}
+
 </style>
 </head>
 <body>
@@ -964,11 +993,16 @@ h3{font-size:17px;letter-spacing:-.025em}
         </div></div>
 
         <div class="step"><div class="snum">5</div><div class="sbody">
-          <div class="sh">Build value from their numbers</div>
+          <div class="sh">Work through the numbers together</div>
           <div class="say">"Roughly what is an average new customer or job worth to you?"</div>
-          <div class="say">"So if you're missing around [X] calls and a customer is worth about $[Y], even getting a small percentage of those back could make a pretty big difference."</div>
-          <div class="cue">Use the ROI calculator when the numbers help. Do not overstate what will convert.</div>
-          <button class="btn ghost" data-go="discovery">Open Discovery &amp; Value</button>
+          <div class="cue">Use the missed-call number they already gave you. Confirm both numbers before doing the math.</div>
+          <div class="say">"Okay, so you said you're missing about [X] calls [per day/week/month], and an average customer is worth about $[Y]. Did I get that right?"</div>
+          <div class="say">"That works out to roughly [monthly missed calls] missed calls a month. If even 20 to 30 percent of those callers turned into customers, you're looking at around [low customers] to [high customers] customers, or roughly $[low revenue] to $[high revenue] in gross sales."</div>
+          <div class="say">"The AI receptionist is $397 a month. At your average ticket, it would only need to help capture about [break-even customers] additional customer(s) in a month for the $397 to be covered in gross sales."</div>
+          <div class="say">"And at around [chosen recovery %] percent of those missed calls becoming customers, you'd be spending roughly $[cost per captured customer] to capture a customer worth about $[average ticket]."</div>
+          <div class="say">"So based on your own numbers, does it look like capturing more of those calls would make sense for the business?"</div>
+          <div class="cue">The percentages are illustrations, not guarantees. Let the prospect correct the assumptions. If the numbers do not make sense, do not force the sale.</div>
+          <button class="btn ghost" type="button" id="open-script-roi">Open Call Value Calculator</button>
         </div></div>
 
         <div class="step"><div class="snum">6</div><div class="sbody">
@@ -993,7 +1027,7 @@ h3{font-size:17px;letter-spacing:-.025em}
 
         <div class="step"><div class="snum">9</div><div class="sbody">
           <div class="sh">Ask for the sale</div>
-          <div class="say">"Based on everything we've gone through, would you like to get started?"</div>
+          <div class="say">"Based on everything we've gone through, do you want to get this set up?"</div>
           <div class="cue stopcue">Stop talking. Let them answer.</div>
         </div></div>
 
@@ -1349,7 +1383,45 @@ h3{font-size:17px;letter-spacing:-.025em}
       </div>
       <div class="btnrow"><button class="btn" data-go="home">Back to Home</button></div>
     </section>
-
+    <div class="sales-modal" id="script-roi-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="script-roi-title">
+      <div class="sales-modal-backdrop" data-close-script-roi></div>
+      <div class="sales-modal-panel">
+        <div class="sales-modal-head">
+          <div>
+            <span class="roi-kicker">LIVE CALL CALCULATOR</span>
+            <h2 id="script-roi-title">Turn their numbers into the value conversation.</h2>
+            <p>Use the prospect's own estimates. Change the recovery rate if they believe a different assumption is more realistic.</p>
+          </div>
+          <button class="modal-x" type="button" data-close-script-roi aria-label="Close calculator">&times;</button>
+        </div>
+        <div class="sales-modal-fields">
+          <label>Missed calls<input id="script-roi-calls" type="number" min="0" step="1" placeholder="e.g. 10"></label>
+          <label>Period<select id="script-roi-period"><option value="day">Per day</option><option value="week">Per week</option><option value="month">Per month</option></select></label>
+          <label>Average customer value<input id="script-roi-ticket" type="number" min="1" step="1" placeholder="e.g. 500"></label>
+          <label>Estimated recovery rate<div class="percent-input"><input id="script-roi-rate" type="number" min="1" max="100" step="1" value="25"><span>%</span></div></label>
+        </div>
+        <div class="sales-modal-results">
+          <div class="modal-primary">
+            <span>ESTIMATED RECOVERED GROSS SALES / MONTH</span>
+            <strong id="script-roi-revenue">—</strong>
+            <small>Based on the recovery rate above</small>
+          </div>
+          <div class="modal-result-grid">
+            <div><span>Missed calls / month</span><strong id="script-roi-monthly">—</strong></div>
+            <div><span>Estimated captured customers</span><strong id="script-roi-customers">—</strong></div>
+            <div><span>Cost per captured customer</span><strong id="script-roi-cac">—</strong></div>
+            <div><span>Average customer value</span><strong id="script-roi-ticket-out">—</strong></div>
+            <div><span>Customers to cover $397</span><strong id="script-roi-breakeven">—</strong></div>
+            <div><span>Recovered sales vs. $397</span><strong id="script-roi-multiple">—</strong></div>
+          </div>
+          <div class="modal-talk-track">
+            <span>USE THIS ON THE CALL</span>
+            <p id="script-roi-talk">Enter their numbers above.</p>
+          </div>
+        </div>
+        <div class="sales-modal-foot">This calculator is a sales-conversation aid, not a forecast. Actual conversion, revenue, margins, and recovered opportunities vary by business.</div>
+      </div>
+    </div>
     </main>
   </div>
 </div>
@@ -1426,7 +1498,42 @@ h3{font-size:17px;letter-spacing:-.025em}
   }
 
 
-  // Calculator uses the prospect's own inputs; figures are estimates of gross revenue.
+  
+  var scriptRoiModal=document.getElementById('script-roi-modal');
+  var openScriptRoi=document.getElementById('open-script-roi');
+  var scriptCalls=document.getElementById('script-roi-calls');
+  var scriptPeriod=document.getElementById('script-roi-period');
+  var scriptTicket=document.getElementById('script-roi-ticket');
+  var scriptRate=document.getElementById('script-roi-rate');
+  function openScriptRoiModal(){scriptRoiModal.classList.add('open');scriptRoiModal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';scriptCalls.focus();}
+  function closeScriptRoiModal(){scriptRoiModal.classList.remove('open');scriptRoiModal.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+  if(openScriptRoi)openScriptRoi.addEventListener('click',openScriptRoiModal);
+  document.querySelectorAll('[data-close-script-roi]').forEach(function(el){el.addEventListener('click',closeScriptRoiModal);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&scriptRoiModal.classList.contains('open'))closeScriptRoiModal();});
+  var scriptDollars=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
+  var scriptDollars2=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:2});
+  var scriptQty=new Intl.NumberFormat('en-US',{maximumFractionDigits:1});
+  function setScriptRoi(id,value){var el=document.getElementById(id);if(el)el.textContent=value;}
+  function updateScriptRoi(){
+    var calls=Number(scriptCalls.value),ticket=Number(scriptTicket.value),rate=Number(scriptRate.value);
+    var valid=scriptCalls.value!==''&&scriptTicket.value!==''&&Number.isFinite(calls)&&Number.isFinite(ticket)&&Number.isFinite(rate)&&calls>=0&&ticket>0&&rate>0&&rate<=100;
+    if(!valid){['script-roi-revenue','script-roi-monthly','script-roi-customers','script-roi-cac','script-roi-ticket-out','script-roi-breakeven','script-roi-multiple'].forEach(function(id){setScriptRoi(id,'—');});setScriptRoi('script-roi-talk','Enter their numbers above.');return;}
+    var factor=scriptPeriod.value==='day'?30:scriptPeriod.value==='week'?52/12:1;
+    var monthly=calls*factor,customers=monthly*(rate/100),revenue=customers*ticket,cac=customers>0?397/customers:0,breakeven=Math.ceil(397/ticket),multiple=revenue/397;
+    setScriptRoi('script-roi-monthly',scriptQty.format(monthly));
+    setScriptRoi('script-roi-customers',scriptQty.format(customers));
+    setScriptRoi('script-roi-revenue',scriptDollars.format(revenue));
+    setScriptRoi('script-roi-cac',customers>0?scriptDollars2.format(cac):'—');
+    setScriptRoi('script-roi-ticket-out',scriptDollars.format(ticket));
+    setScriptRoi('script-roi-breakeven',String(breakeven));
+    setScriptRoi('script-roi-multiple',multiple.toFixed(1)+'×');
+    var periodLabel=scriptPeriod.value==='day'?'day':scriptPeriod.value==='week'?'week':'month';
+    setScriptRoi('script-roi-talk','You said about '+scriptQty.format(calls)+' calls per '+periodLabel+' are missed, and an average customer is worth about '+scriptDollars.format(ticket)+'. That is roughly '+scriptQty.format(monthly)+' missed calls a month. At '+scriptQty.format(rate)+'%, that would be about '+scriptQty.format(customers)+' customers, or around '+scriptDollars.format(revenue)+' in gross sales. Against the $397 monthly cost, that is roughly '+(customers>0?scriptDollars2.format(cac):'—')+' per captured customer for a customer worth about '+scriptDollars.format(ticket)+'.');
+  }
+  [scriptCalls,scriptPeriod,scriptTicket,scriptRate].forEach(function(el){if(el){el.addEventListener('input',updateScriptRoi);el.addEventListener('change',updateScriptRoi);}});
+  updateScriptRoi();
+
+// Calculator uses the prospect's own inputs; figures are estimates of gross revenue.
   var roiCalls = document.getElementById('roi-calls');
   var roiPeriod = document.getElementById('roi-period');
   var roiTicket = document.getElementById('roi-ticket');
